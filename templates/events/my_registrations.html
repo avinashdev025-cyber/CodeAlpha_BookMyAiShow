@@ -1,0 +1,60 @@
+{% extends 'events/base.html' %}
+{% load static %}
+
+{% block title %}BookMyAishow - My Registrations{% endblock %}
+
+{% block content %}
+<div class="dashboard-container" id="user-dashboard-container">
+    <h1 class="dashboard-title" id="dashboard-header-title">My Registered Events</h1>
+
+    {% if registrations %}
+        <div class="registrations-list" id="registrations-dashboard-list">
+            {% for reg in registrations %}
+                <div class="registration-item glass-panel" id="registration-row-{{ reg.id }}">
+                    <div class="registration-item-info">
+                        <h2 class="registration-item-title">{{ reg.event.title }}</h2>
+                        <div class="registration-item-meta">
+                            <span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-calendar" style="vertical-align: middle; margin-right: 0.25rem;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                {{ reg.event.date|date:"F d, Y" }}
+                            </span>
+                            <span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock" style="vertical-align: middle; margin-right: 0.25rem;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                {{ reg.event.time|time:"f A" }}
+                            </span>
+                            <span>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin" style="vertical-align: middle; margin-right: 0.25rem;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                {{ reg.event.location }}
+                            </span>
+                        </div>
+                        <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-muted);">
+                            Registered on: {{ reg.registration_date|date:"F d, Y @ h:i A" }}
+                        </div>
+                    </div>
+
+                    <div class="registration-item-actions">
+                        <span class="registration-status-badge {% if reg.status == 'REGISTERED' %}registered{% else %}cancelled{% endif %}" id="status-badge-{{ reg.id }}">
+                            {{ reg.get_status_display }}
+                        </span>
+                        
+                        <a href="{% url 'event_detail' reg.event.id %}" class="btn btn-secondary" id="view-registered-details-{{ reg.id }}" style="padding: 0.5rem 1rem; font-size: 0.85rem;">View Event</a>
+                        
+                        {% if reg.status == 'REGISTERED' %}
+                            <form action="{% url 'cancel_registration' reg.id %}?next={% url 'my_registrations' %}" method="post" class="cancel-registration-form" data-event-title="{{ reg.event.title }}" id="dashboard-cancel-form-{{ reg.id }}" style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger" id="dashboard-cancel-btn-{{ reg.id }}" style="padding: 0.5rem 1.25rem; font-size: 0.85rem;">Cancel Spot</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state glass-panel" id="no-registrations-found">
+            <h2 class="empty-state-title">No Registrations Yet</h2>
+            <p class="empty-state-text">You haven't registered for any events yet. Check out our upcoming events to get started!</p>
+            <a href="{% url 'event_list' %}" class="btn btn-primary" id="browse-events-empty-btn">Browse Events</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

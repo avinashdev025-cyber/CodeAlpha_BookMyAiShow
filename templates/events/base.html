@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BookMyAishow - Modern AI Event Registration{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Discover and register for the latest AI technology, workshops, and meetups. Secure your spot on BookMyAishow.{% endblock %}">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=2.0">
+</head>
+<body>
+    <header>
+        <nav class="navbar" id="main-navigation">
+            <a href="{% url 'event_list' %}" class="brand-link" id="brand-home-link">
+                <span class="brand-logo-text">BookMyAishow</span>
+            </a>
+            <ul class="nav-links" id="nav-menu-links">
+                <li><a href="{% url 'event_list' %}" class="nav-link {% if request.resolver_match.url_name == 'event_list' or request.resolver_match.url_name == 'event_detail' %}active{% endif %}" id="nav-events-link">Events</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'my_registrations' %}" class="nav-link {% if request.resolver_match.url_name == 'my_registrations' %}active{% endif %}" id="nav-dashboard-link">My Registrations</a></li>
+                    <li><a href="{% url 'admin:index' %}" class="nav-link" id="nav-admin-link">Organize</a></li>
+                    <li>
+                        <form action="{% url 'logout' %}" method="post" style="display: inline;" id="logout-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-secondary" id="logout-button" style="padding: 0.4rem 1rem;">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="nav-link" id="nav-login-link">Login</a></li>
+                    <li><a href="{% url 'signup' %}" class="btn btn-primary" id="nav-signup-button">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        {% if messages %}
+            <div class="messages-container" id="system-messages-container">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}error{% else %}{{ message.tags }}{% endif %}" id="alert-msg-{{ forloop.counter }}" role="alert">
+                        <span>{{ message }}</span>
+                        <button class="alert-close" aria-label="Close message">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer id="main-footer">
+        <p>&copy; 2026 BookMyAishow. Made with passion for seamless event experiences.</p>
+    </footer>
+
+    <!-- Client-side Interactive Logic -->
+    <script src="{% static 'js/main.js' %}?v=2.0"></script>
+</body>
+</html>

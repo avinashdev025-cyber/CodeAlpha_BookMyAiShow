@@ -1,0 +1,54 @@
+{% extends 'events/base.html' %}
+{% load static %}
+{% load socialaccount %}
+
+{% block title %}BookMyAishow - Sign Up{% endblock %}
+
+{% block content %}
+<div class="form-container glass-panel" id="user-signup-container">
+    <h1 class="form-title" id="signup-header-title">Create Account</h1>
+
+    <form method="post" id="signup-form">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-error" id="signup-non-field-errors" style="margin-bottom: 1.5rem;">
+                {% for error in form.non_field_errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% for field in form %}
+            <div class="form-group" id="signup-group-{{ field.name }}">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                
+                {% if field.errors %}
+                    <p class="form-help" style="color: var(--accent-secondary);">{{ field.errors.0 }}</p>
+                {% elif field.help_text %}
+                    <p class="form-help">{{ field.help_text|safe }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="signup-submit-btn">Create Account</button>
+    </form>
+
+    <div class="form-divider">OR</div>
+    
+    <a href="{% provider_login_url 'google' next=request.GET.next %}" class="btn btn-google" id="google-signup-btn">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google logo" class="google-icon">
+        Sign Up with Google
+    </a>
+
+
+    <div class="form-footer" id="signup-footer-links">
+        <p>Already have an account? <a href="{% url 'login' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" class="form-link" id="signup-login-link">Login Here</a></p>
+    </div>
+</div>
+{% endblock %}
