@@ -16,7 +16,7 @@ def seed():
     # Configure the default Django Site (required by django-allauth)
     site = Site.objects.get_current()
     site.domain = '127.0.0.1:8000'
-    site.name = 'BookMyAishow'
+    site.name = 'BookMyAiShow'
     site.save()
     print(f"Updated default Site domain to {site.domain}")
 
@@ -44,8 +44,8 @@ def seed():
     # 3. Create 11 Sample AI Events (all with at least 50 capacity)
     events_data = [
         {
-            "title": "BookMyAishow Grand Opening: The AI Revolution",
-            "description": "Welcome to the official launch event of BookMyAishow! Join us for live demonstrations of next-generation autonomous AI agents, multi-modal LLM integrations, and a fireside chat with industry leading researchers on the future of code generation.\n\nNetworking cocktail party to follow.",
+            "title": "BookMyAiShow Grand Opening: The AI Revolution",
+            "description": "Welcome to the official launch event of BookMyAiShow! Join us for live demonstrations of next-generation autonomous AI agents, multi-modal LLM integrations, and a fireside chat with industry leading researchers on the future of code generation.\n\nNetworking cocktail party to follow.",
             "date": datetime.date.today() + datetime.timedelta(days=5),
             "time": datetime.time(18, 0),
             "location": "Aether Grand Hall, San Francisco",

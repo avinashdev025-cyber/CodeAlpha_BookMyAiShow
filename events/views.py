@@ -127,7 +127,7 @@ class SignUpView(CreateView):
         valid = super().form_valid(form)
         # Automatically log in the user after signing up
         login(self.request, self.object, backend='django.contrib.auth.backends.ModelBackend')
-        messages.success(self.request, f"Welcome to BookMyAishow, {self.object.username}! Your account was created.")
+        messages.success(self.request, f"Welcome to BookMyAiShow, {self.object.username}! Your account was created.")
         return valid
 
 
