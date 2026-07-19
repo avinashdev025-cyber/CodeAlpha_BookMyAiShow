@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}BookMyAishow - Modern AI Event Registration{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}Discover and register for the latest AI technology, workshops, and meetups. Secure your spot on BookMyAishow.{% endblock %}">
+    <title>{% block title %}BookMyAiShow - Modern AI Event Registration{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Discover and register for the latest AI technology, workshops, and meetups. Secure your spot on BookMyAiShow.{% endblock %}">
     
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=2.0">
@@ -13,8 +13,9 @@
 <body>
     <header>
         <nav class="navbar" id="main-navigation">
-            <a href="{% url 'event_list' %}" class="brand-link" id="brand-home-link">
-                <span class="brand-logo-text">BookMyAishow</span>
+            <a href="{% url 'event_list' %}" class="brand-link" id="brand-home-link" style="display: flex; align-items: center; gap: 0.75rem;">
+                <img src="{% static 'images/logo.png' %}" alt="BookMyAiShow Logo" id="brand-logo-img" style="height: 32px; width: 32px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border-color);">
+                <span class="brand-logo-text">BookMyAiShow</span>
             </a>
             <ul class="nav-links" id="nav-menu-links">
                 <li><a href="{% url 'event_list' %}" class="nav-link {% if request.resolver_match.url_name == 'event_list' or request.resolver_match.url_name == 'event_detail' %}active{% endif %}" id="nav-events-link">Events</a></li>
@@ -52,7 +53,7 @@
     </main>
 
     <footer id="main-footer">
-        <p>&copy; 2026 BookMyAishow. Made with passion for seamless event experiences.</p>
+        <p>&copy; 2026 BookMyAiShow. Made with passion for seamless event experiences.</p>
     </footer>
 
     <!-- Client-side Interactive Logic -->
