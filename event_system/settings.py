@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+import dj_database_url
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -123,7 +125,12 @@ db_password = os.getenv('DB_PASSWORD')
 db_host = os.getenv('DB_HOST', 'localhost')
 db_port = os.getenv('DB_PORT', '5432')
 
-if db_name and db_user:
+database_url = os.getenv('DATABASE_URL')
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.config(default=database_url, conn_max_age=600)
+    }
+elif db_name and db_user:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -173,4 +180,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'event_list'
 LOGOUT_REDIRECT_URL = 'event_list'
+
+# Use WhiteNoise storage in production (when DEBUG is False) to serve compressed static files
+if not DEBUG:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+    # Disable strict manifest check to prevent ValueErrors in production if assets are missing
+    WHITENOISE_MANIFEST_STRICT = False
 
